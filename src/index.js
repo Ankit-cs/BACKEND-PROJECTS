@@ -1,9 +1,11 @@
 // require('dotenv').config({path:'./env'})
-import dotenv from 'dotenv'
-import connectDB from "./databaseConnection/index.js";
+import dotenv from 'dotenv';
+import connectDB from './databaseConnection/index.js';
 
+dotenv.config();  // Ensure dotenv is loaded to access the environment variables
 
-connectDB()
+connectDB();  // Now call the function
+
 
 
 
