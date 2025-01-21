@@ -1,40 +1,53 @@
-// require('dotenv').config({path:'./env'})
-import dotenv from 'dotenv';
-import connectDB from './databaseConnection/index.js';
+// Import necessary modules
+import dotenv from "dotenv";
+import connectDB from "./db/index.js"; // Ensure this file exports the `connectDB` function
+import { app } from "./app.js"; // Ensure this file exports the `app` instance
 
-dotenv.config();  // Ensure dotenv is loaded to access the environment variables
+// Configure dotenv to load environment variables
+dotenv.config({ path: "./.env" });
 
-connectDB();  // Now call the function
-then(()=>{
-  app.listen(process.env.PORT || 8000,()=>{
-    console.log(`Server is running at PORT:${process.env.PORT}`);
+// Connect to MongoDB and start the server
+connectDB()
+  .then(() => {
+    const PORT = process.env.PORT || 8000;
+    app.listen(PORT, () => {
+      console.log(`⚙️ Server is running at port: ${PORT}`);
+    });
   })
-})
-.catch((err)=>{
-console.log("MONGO db connection failed!!!",err);
-}
-);
+  .catch((err) => {
+    console.error("❌ MongoDB connection failed: ", err);
+  });
 
-
-
-
-
-/*<----------------------THIS IS THE FIRST APPROACH TO CONNECT WITH DATABASE MONGOOSE---------> */
 /*
-import express from "express";
-const app = express();
-(async () => {
+Sample `connectDB` implementation (./db/index.js):
+---------------------------------------------------
+import mongoose from "mongoose";
+
+const connectDB = async () => {
   try {
-    await mongoose.connect(`${process.env.MANGODB_URL}/${DB_NAME}`);
-    app.on("error", (error) => {
-      console.log("ERRR: ", error);
-      throw error;
+    await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
     });
-    app.listen(process.env.PORT, () => {
-      console.log(`App is listening on port ${process.env.PORT}`);
-    });
+    console.log("✅ MongoDB connected successfully.");
   } catch (error) {
-    console.error("ERROR: ", error);
+    console.error("❌ Error connecting to MongoDB: ", error);
     throw error;
   }
-})(); // IT IS A IFEE FUNCTION PROFESSIONALLY IT STARTED WITH ";{SEMICOLON}"*/
+};
+
+export default connectDB;
+*/
+
+/*
+Sample `app` implementation (./app.js):
+---------------------------------------
+import express from "express";
+
+const app = express();
+
+// Add middleware, routes, etc.
+app.use(express.json());
+
+export { app };
+*
